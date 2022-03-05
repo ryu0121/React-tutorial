@@ -7,24 +7,16 @@ import './index.css';
 // 今回の場合は、「() => handleClick(i)」という関数が入っている
 const Square = (props) => {
   return (
-    <button
-      className="square"
-      onClick={() => props.onClick()}
-    >
+    <button className="square" onClick={() => props.onClick()}>
       {props.value}
     </button>
   );
-}
+};
 
 const Board = (props) => {
   const renderSquare = (i) => {
-    return (
-      <Square
-        value={props.squares[i]}
-        onClick={() => props.onClick(i)}
-      />
-    );
-  }
+    return <Square value={props.squares[i]} onClick={() => props.onClick(i)} />;
+  };
 
   return (
     <div>
@@ -45,10 +37,12 @@ const Board = (props) => {
       </div>
     </div>
   );
-}
+};
 
 const Game = () => {
-  const [history, setHistory] = React.useState([{ squares: Array(9).fill(null) }]);
+  const [history, setHistory] = React.useState([
+    { squares: Array(9).fill(null) },
+  ]);
   const [xIsNext, setXIsNext] = React.useState(true);
   const [stepNumber, setStepNumber] = React.useState(0);
 
@@ -57,21 +51,19 @@ const Game = () => {
   const winner = calculateWinner(current.squares);
 
   const moves = history.map((_step, move) => {
-    const desc = move ?
-      'Go to move #' + move :
-      'Go to game start';
+    const desc = move ? 'Go to move #' + move : 'Go to game start';
     return (
       <li key={move}>
         <button onClick={() => jumpTo(move)}>{desc}</button>
       </li>
-    )
-  })
+    );
+  });
 
   let status;
   if (winner) {
     status = 'Winner: ' + winner;
   } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O')
+    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
   }
 
   const handleClick = (i) => {
@@ -85,25 +77,26 @@ const Game = () => {
     squares[i] = xIsNext ? 'X' : 'O';
     console.log(i);
     // concat だとイミュータブルだから元の配列が壊れない。
-    setHistory(copiedHistory.concat([{
-      squares: squares,
-    }]));
+    setHistory(
+      copiedHistory.concat([
+        {
+          squares: squares,
+        },
+      ])
+    );
     setStepNumber(copiedHistory.length);
     setXIsNext(!xIsNext);
-  }
+  };
 
   const jumpTo = (step) => {
     setStepNumber(step);
     setXIsNext(step % 2 === 0);
-  }
+  };
 
   return (
     <div className="game">
       <div className="game-board">
-        <Board
-          squares={current.squares}
-          onClick={(i) => handleClick(i)}
-        />
+        <Board squares={current.squares} onClick={(i) => handleClick(i)} />
       </div>
       <div className="game-info">
         <div>{status}</div>
@@ -111,10 +104,9 @@ const Game = () => {
       </div>
     </div>
   );
-}
+};
 
-ReactDOM.render(<Game />, document.getElementById("root"));
-
+ReactDOM.render(<Game />, document.getElementById('root'));
 
 function calculateWinner(squares) {
   const lines = [
